@@ -2,7 +2,6 @@
 const router = require('express').Router();
 const bodyParser = require('body-parser');
 const File = require('./../models/file');
-const FolderFile = require('./../models/folder_file');
 
 
 // middleware
@@ -37,17 +36,26 @@ router.get('/', async (req,res) =>{
 });
 
 router.post("/create-new-file", async (req,res)=>{
-	const {file_name,content,folder_id,user_id} = req.body;
-	let fileresult, filefolderresult ;
-	if(typeof folder_id != 'undefined'){
-		fileresult = await File.create({file_name, content, user_id, isInFolder:true});
-		filefolderresult = await FolderFile.create({folder_id:folder_id, file_id:fileresult._id});
-		fileresult={
-			file:fileresult,
-			folder_file:filefolderresult
-		}
+	const {file_name,content,folder_id, user_id} = req.body;
+
+	var fileresult;
+	if(typeof folder_id != "undefined"){
+		// res.json({
+		// 	ins:"inside"
+		// });
+		fileresult = await File.create({file_name, content, user_id, folder_id,isInFolder:true }
+			).catch((err)=>{
+			res.json({
+				error:err
+			});
+		});
+
 	}else{
-		fileresult = await File.create({file_name, content, user_id});
+		fileresult = await File.create({file_name, content, user_id}).catch((err)=>{
+			res.json({
+				error:err	
+			});
+		 });
 	}
 		
 	if(fileresult){

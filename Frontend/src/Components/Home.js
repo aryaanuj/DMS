@@ -8,16 +8,17 @@ const Home = () =>{
 	const [fdata, setfData] = useState([]);
 	const [filedata, setfileData] = useState([]);
 	// fetch user profile
-	const fetchUser = async () =>{
+	const fetchData = async () =>{
 		const data = JSON.parse(localStorage.getItem('user'));
 		if(data!=null){
 			setisAuthenticated(true);
 			axios.defaults.headers.common['x-access-token'] = data.token;
 			const response = await axios.get("folder/?user_id="+data.user_id).catch((err)=>console.log(err));
-			setfData(response.data.data);
+			
 			const fileres = await axios.get("file/?user_id="+data.user_id).catch((err)=>console.log(err));
-			console.log(fileres.data.data);
-			setfileData(fileres.data.data);
+			const fd = response.data.data.concat(fileres.data.data);
+			setfData(fd);
+			
 		}
 	}
 
@@ -30,33 +31,40 @@ const Home = () =>{
 
 	useEffect(()=>{
 		checkAuth();
-		fetchUser();
+		fetchData();
 	}, []);
 
+
+	console.log(fdata);
 	const getFolderFiles = async (id) =>{
-		console.log(id);
-		const res = await axios.get("folder-file/", {fid:id}).catch((err)=>console.log(err));
-		console.log(res.data.data);
-		setfData(res.data.data);
+		// console.log(id);
+		// const res = await axios.get("folder-file/", {fid:id}).catch((err)=>console.log(err));
+		// console.log(res.data.data);
+		// setfData(res.data.data);
 	}
 	const fetchFolder = fdata.map((item, index)=>{
-		const {folder_name, _id} = item;
+		var {folder_name,file_name, _id} = item;
+		if(file_name!=undefined){
+			folder_name = file_name;
+		}
+		
 		return (<tr key={index}>
 				<td onClick={()=>getFolderFiles(_id)} style={{cursor:'pointer'}}>{folder_name}</td>
+
 			</tr>
 		);
 	});
 
-	const getFileContent = (content) =>{
-		console.log(content);
-	}
-	const fetchFiles = filedata.map((item, index)=>{
-		const {file_name, content} = item;
-		return (<tr key={index}>
-				<td  onClick={()=>getFileContent(content)} style={{cursor:'pointer'}}>{file_name}</td>
-			</tr>
-		);
-	})
+	// const getFileContent = (content) =>{
+	// 	console.log(content);
+	// }
+	// const fetchFiles = filedata.map((item, index)=>{
+	// 	const {file_name, content} = item;
+	// 	return (<tr key={index}>
+	// 			<td  onClick={()=>getFileContent(content)} style={{cursor:'pointer'}}>{file_name}</td>
+	// 		</tr>
+	// 	);
+	// })
 	return (
 		<div className="container">
 		<table className="table table-striped table-bordered">
@@ -66,8 +74,8 @@ const Home = () =>{
 			</tr>
 			</thead>
 			<tbody>
+			
 			{fetchFolder}
-			{fetchFiles}
 			</tbody>
 		</table>
 			

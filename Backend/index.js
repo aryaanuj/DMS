@@ -14,7 +14,6 @@ const database = require('./app/database/index');
 const userController = require('./app/http/controllers/user');
 const folderController = require('./app/http/controllers/folder');
 const fileController = require('./app/http/controllers/file');
-const folderfileController = require('./app/http/controllers/folder_file');
 
 // middleware setup
 app.use(morgan('dev'));
@@ -26,7 +25,6 @@ app.use(cookieParser());
 app.use("/api/user/",userController);
 app.use("/api/folder/", folderController);
 app.use("/api/file/", fileController);
-app.use("/api/folder-file/", folderfileController);
 
 // default routes
 app.all("/", (req,res)=>{

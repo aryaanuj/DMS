@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('./user');
+const Folder = require('./folder');
 const Schema = mongoose.Schema;
 
 
@@ -18,6 +19,7 @@ const fileSchema = mongoose.Schema({
 		type:Boolean,
 		default:false
 	},
+	folder_id:{type:String},
 	user_id:[{type: Schema.Types.ObjectId, ref: 'User'}]
 });
 
