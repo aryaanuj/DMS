@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {useHistory} from 'react-router-dom';
+import {useHistory, Link} from 'react-router-dom';
 
 const Home = () =>{
 	const history = useHistory();
@@ -67,6 +67,7 @@ const Home = () =>{
 	// })
 	return (
 		<div className="container">
+		<Link to='/createFolder' className="btn btn-primary btn-sm">New Folder</Link>
 		<table className="table table-striped table-bordered">
 			<thead>
 			<tr>
