@@ -6,7 +6,8 @@ const Home = () =>{
 	const history = useHistory();
 	const [isAuthenticated, setisAuthenticated] = useState(false);
 	const [fdata, setfData] = useState([]);
-	const [filedata, setfileData] = useState([]);
+	const [filedata, setfileData] = useState();
+	const [contentStatus, setContentStatus] = useState(false);
 	// fetch user profile
 	const fetchData = async () =>{
 		const data = JSON.parse(localStorage.getItem('user'));
@@ -35,38 +36,49 @@ const Home = () =>{
 	}, []);
 
 
-	console.log(fdata);
-	const getFolderFiles = async (id) =>{
+	// console.log(fdata);
+	const getFolderFiles = async (id, isFile) =>{
 		// console.log(id);
-		// const res = await axios.get("folder-file/", {fid:id}).catch((err)=>console.log(err));
-		// console.log(res.data.data);
-		// setfData(res.data.data);
+		if(!isFile){
+			const res = await axios.get("file/fileByFolder", {folderid:id}).catch((err)=>console.log(err));
+			console.log(res);
+			// setfileData(res.data.data);
+		}else{
+			const data = JSON.parse(localStorage.getItem('user'));
+			const res = await axios.get("file/fileById/?user_id="+data.user_id+"&fileid="+id).catch((err)=>console.log(err));
+			console.log(id);
+			console.log(res.data.data[0].content);
+			setfileData(res.data.data[0].content);
+		}
+
+		setContentStatus(true);
+		// console.log(filedata);
+		
 	}
 	const fetchFolder = fdata.map((item, index)=>{
 		var {folder_name,file_name, _id} = item;
+		var isFile= false;
 		if(file_name!=undefined){
 			folder_name = file_name;
+			isFile = true;
 		}
 		
 		return (<tr key={index}>
-				<td onClick={()=>getFolderFiles(_id)} style={{cursor:'pointer'}}>{folder_name}</td>
-
+				<td onClick={()=>getFolderFiles(_id, isFile)} style={{cursor:'pointer'}}>{folder_name}</td>
 			</tr>
 		);
 	});
-
-	// const getFileContent = (content) =>{
-	// 	console.log(content);
-	// }
-	// const fetchFiles = filedata.map((item, index)=>{
-	// 	const {file_name, content} = item;
-	// 	return (<tr key={index}>
-	// 			<td  onClick={()=>getFileContent(content)} style={{cursor:'pointer'}}>{file_name}</td>
-	// 		</tr>
-	// 	);
-	// })
+	// console.log("heelo"+filedata);
+	var cdata="";
+	if(contentStatus){
+		cdata = <div className="m-4">
+			<p>File Content: {filedata}</p>
+		</div>
+	}
 	return (
+		
 		<div className="container">
+		{cdata}
 		<div className="row">
 		<div className="col-md-2">
 		<Link to='/createFolder' className="btn btn-primary btn-sm">New Folder</Link>
@@ -86,8 +98,9 @@ const Home = () =>{
 			{fetchFolder}
 			</tbody>
 		</table>
-			
+		
 		</div>
+		
 			
 		);
 }

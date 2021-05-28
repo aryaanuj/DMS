@@ -13,7 +13,63 @@ router.use(bodyParser.urlencoded({extended:true}));
 router.get('/', async (req,res) =>{
 	try{
 		const user_id = req.query.user_id;
-		const response = await File.find({user_id:user_id});
+		
+			response =  await File.find({user_id:user_id, isInFolder:false});
+		
+		if(response.length>0){
+			return res.status(200).json({
+				status:true,
+				message:"Files result",
+				data:response
+			});
+		}else{
+			return res.status(200).json({
+				status:true,
+				message:"No Records Found"
+			});
+		}
+	}catch(err){
+		return res.status(500).json({
+			status:false,
+			message:"Error: File result fetching error",
+			error:err
+		});
+	}
+});
+
+
+router.get('/fileById', async (req,res) =>{
+	try{
+		const user_id = req.query.user_id;
+		const fileid = req.query.fileid;
+		response = await File.find({_id:fileid, user_id:user_id, isInFolder:false});
+		
+		if(response.length>0){
+			return res.status(200).json({
+				status:true,
+				message:"Files result",
+				data:response
+			});
+		}else{
+			return res.status(200).json({
+				status:true,
+				message:"No Records Found"
+			});
+		}
+	}catch(err){
+		return res.status(500).json({
+			status:false,
+			message:"Error: File result fetching error",
+			error:err
+		});
+	}
+});
+
+
+router.get('/fileByFolder', async (req,res) =>{
+	try{
+		const folderid = req.query.folderid;
+		const response = await File.find({isInFolder:true,folder_id:folderid});
 		if(response.length>0){
 			return res.status(200).json({
 				status:true,
