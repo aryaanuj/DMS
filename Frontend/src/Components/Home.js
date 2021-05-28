@@ -67,7 +67,14 @@ const Home = () =>{
 	// })
 	return (
 		<div className="container">
+		<div className="row">
+		<div className="col-md-2">
 		<Link to='/createFolder' className="btn btn-primary btn-sm">New Folder</Link>
+		</div>
+		<div className="col-md-2">
+		<Link to='/createFile' className="btn btn-primary btn-sm ml-2">New File</Link>
+		</div>
+		</div>
 		<table className="table table-striped table-bordered">
 			<thead>
 			<tr>

@@ -1,24 +1,26 @@
 import React, {useState} from 'react';
-import {useHistory} from 'react-router-dom';
+import {useHistory, Link} from 'react-router-dom';
 import axios from 'axios';
 
-const createFolder = () =>{
-	const [fname, setFname] = useState("");
+const CreateFolder = () =>{
+	const [data, setData] = useState({
+		folder:""
+	});
 	const history = useHistory();
 	const handleInput = (e) => {
-		setFname(e.target.value);
+		setData({...data, folder:e.target.value});
 	}
 	
 	const handleSubmit = async (e) =>{
 		e.preventDefault();
 		const response = await axios.post("folder/create-new-folder", {
-				folder_name:fname, 
-				user_id:JSON.stringify(localStorage.get('user')).user_id
+				folder_name:data.folder, 
+				user_id:JSON.parse(localStorage.getItem('user')).user_id
 			}).catch((err)=>{
 				console.log(err);
 			});
-			console.log(response);
-			history.push('/');
+		console.log(response);
+		history.push('/');
 	}
 
 	return (
@@ -26,19 +28,20 @@ const createFolder = () =>{
 		 <div className="back">
 			<div className="div-center">
 			  <div className="content">
+			  <h3>Create New Folder</h3>
 			  <hr />
 			    <form onSubmit={handleSubmit}>
 			      <div className="form-group mb-3">
 			        <label htmlFor="exampleInputEmail1">Folder Name</label>
-			        <input type="text" name="fname" className="form-control" value={fname} onChange={handleInput}  placeholder="Folder Name" />
+			        <input type="text" name="fname" className="form-control" value={data.folder} onChange={handleInput}  placeholder="Folder Name" />
 			      </div>
-			      
-			      <button type="submit" className="btn btn-primary">Create</button>
+			      	<button type="submit" className="btn btn-primary btn-block">Create</button>
 			    </form>
+			    <Link to="/" className='btn btn-success btn-block'>Back</Link>
 			  </div>
 			</div>
 		</div>
 		);
 }
 
-export default createFolder;
+export default CreateFolder;
