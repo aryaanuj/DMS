@@ -1,5 +1,5 @@
-import React, {useHistory} from 'react';
-import {Link} from 'react-router-dom';
+import React from 'react';
+import {Link, useHistory} from 'react-router-dom';
 
 const Navbar = () =>{
 	const history = useHistory();
@@ -14,7 +14,7 @@ const Navbar = () =>{
 	if(localStorage.getItem('user') != null){
 			navLink = <a className="nav-link" style={{cursor:'pointer'}} onClick={logout}>Logout</a>
 		}else{ navLink = <Link to="/login" className="nav-link" >Login</Link>}
-	
+
 	return (
 		<nav className="navbar navbar-expand-lg navbar-light bg-light">
 		  <div className="container-fluid">

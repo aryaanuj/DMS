@@ -6,10 +6,6 @@ const Schema = mongoose.Schema;
 
 // user schema
 const userSchema = mongoose.Schema({
-	username:{
-		type:String,
-		required:true
-	},
 	email:{
 		type:String,
 		required:true,
@@ -18,10 +14,6 @@ const userSchema = mongoose.Schema({
 	password:{
 		type:String,
 		required:true
-	},
-	isActive:{
-		type:Boolean,
-		default:true
 	},
 	createdOn:{
 		type:Date,

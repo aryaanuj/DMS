@@ -43,7 +43,6 @@ router.all("/", async (req,res) => {
 // create new user route
 router.post("/register", 
 	[
-	check('username').not().isEmpty().trim().escape(),
 	check('password').not().isEmpty().trim().escape(),
 	check('email').isEmail().normalizeEmail()
 	], 
@@ -60,7 +59,7 @@ router.post("/register",
 		}
 
 		// result destructuring
-		const {username,email,password} = req.body;
+		const {email,password} = req.body;
 
 		// password hashing
 		const hashPass = bcrypt.hashSync(password,10);
@@ -75,7 +74,7 @@ router.post("/register",
 				});
 			}
 			// create new user
-			const UserResult = await User.create({ username, email, password:hashPass});
+			const UserResult = await User.create({email, password:hashPass});
 
 			if(UserResult){
 				return res.status(200).json({
