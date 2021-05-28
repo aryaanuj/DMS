@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useHistory, Link} from 'react-router-dom';
 import axios from 'axios';
 
@@ -10,7 +10,18 @@ const CreateFolder = () =>{
 	const handleInput = (e) => {
 		setData({...data, folder:e.target.value});
 	}
-	
+
+	const checkAuth = () => {
+		if(localStorage.getItem('user') == null){
+			history.push('/login');
+		}
+	}
+
+	useEffect(()=>{
+		checkAuth();
+	}, []);
+
+
 	const handleSubmit = async (e) =>{
 		e.preventDefault();
 		const response = await axios.post("folder/create-new-folder", {

@@ -15,6 +15,15 @@ const CreateFile = () =>{
 		// console.log(data);
 	}
 
+
+	const checkAuth = () => {
+		if(localStorage.getItem('user') == null){
+			history.push('/login');
+		}
+	}
+
+
+
 	const fetchFolders = async () =>{
 		const datas = JSON.parse(localStorage.getItem('user'));
 		if(data!=null){
@@ -26,6 +35,7 @@ const CreateFile = () =>{
 	}
 
 	useEffect(()=>{
+		checkAuth();
 		fetchFolders();
 	}, []);
 
