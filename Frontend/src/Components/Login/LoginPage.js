@@ -7,6 +7,7 @@ const LoginPage = () =>{
 		email:"",
 		password:""
 	});
+	const [register, setRegister] = useState(false);
 
 	const history = useHistory();
 
@@ -54,6 +55,9 @@ const LoginPage = () =>{
 			        <input type="password" className="form-control" name="password" value={data.password}  onChange={handleInput} placeholder="Password" />
 			      </div>
 			      <button type="submit" className="btn btn-primary">Login</button>
+			      if(!register){
+			      	<a onClick={()=>setRegister(true)}>Register</a>
+			      }
 			    </form>
 			  </div>
 			</div>

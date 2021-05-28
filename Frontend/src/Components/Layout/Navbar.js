@@ -1,6 +1,20 @@
-import React from 'react';
+import React, {useHistory} from 'react';
+import {Link} from 'react-router-dom';
 
 const Navbar = () =>{
+	const history = useHistory();
+
+	// logout functionality
+	const logout = () =>{
+		localStorage.clear();
+		history.push('/login');
+	}
+
+	var navLink;
+	if(localStorage.getItem('user') != null){
+			navLink = <a className="nav-link" style={{cursor:'pointer'}} onClick={logout}>Logout</a>
+		}else{ navLink = <Link to="/login" className="nav-link" >Login</Link>}
+	
 	return (
 		<nav className="navbar navbar-expand-lg navbar-light bg-light">
 		  <div className="container-fluid">
@@ -14,10 +28,7 @@ const Navbar = () =>{
 		          <a className="nav-link active" aria-current="page" href="#">Home</a>
 		        </li>
 		        <li className="nav-item">
-		          <a className="nav-link" href="#">Login</a>
-		        </li>
-		        <li className="nav-item">
-		          <a className="nav-link" href="#">Register</a>
+		        	{navLink}
 		        </li>
 		      </ul>
 		    </div>
