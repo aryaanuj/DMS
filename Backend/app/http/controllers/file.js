@@ -2,6 +2,7 @@
 const router = require('express').Router();
 const bodyParser = require('body-parser');
 const File = require('./../models/file');
+const Authentication = require('./../middlewares/Authentication');
 
 
 // middleware
@@ -10,7 +11,7 @@ router.use(bodyParser.urlencoded({extended:true}));
 
 
 // routes
-router.get('/', async (req,res) =>{
+router.get('/',Authentication, async (req,res) =>{
 	try{
 		const user_id = req.query.user_id;
 		
@@ -38,7 +39,7 @@ router.get('/', async (req,res) =>{
 });
 
 
-router.get('/fileById', async (req,res) =>{
+router.get('/fileById',Authentication, async (req,res) =>{
 	try{
 		const user_id = req.query.user_id;
 		const fileid = req.query.fileid;
@@ -66,7 +67,7 @@ router.get('/fileById', async (req,res) =>{
 });
 
 
-router.get('/fileByFolder', async (req,res) =>{
+router.get('/fileByFolder',Authentication, async (req,res) =>{
 	try{
 		const folderid = req.query.folderid;
 		const response = await File.find({isInFolder:true,folder_id:folderid});
@@ -91,7 +92,7 @@ router.get('/fileByFolder', async (req,res) =>{
 	}
 });
 
-router.post("/create-new-file", async (req,res)=>{
+router.post("/create-new-file",Authentication, async (req,res)=>{
 	const {file_name,content,folder_id, user_id} = req.body;
 
 	var fileresult;

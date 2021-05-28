@@ -2,6 +2,7 @@
 const router = require('express').Router();
 const bodyParser = require('body-parser');
 const Folder = require('./../models/folder');
+const Authentication = require('./../middlewares/Authentication');
 
 
 // middleware
@@ -10,7 +11,7 @@ router.use(bodyParser.urlencoded({extended:true}));
 
 
 // routes
-router.get('/', async (req,res) =>{
+router.get('/', Authentication, async (req,res) =>{
 	try{
 		const user_id = req.query.user_id;
 		const response = await Folder.find({user_id:user_id});
