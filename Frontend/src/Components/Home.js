@@ -7,8 +7,9 @@ const Home = () =>{
 	const [isAuthenticated, setisAuthenticated] = useState(false);
 	const [fdata, setfData] = useState([]);
 	const [filedata, setfileData] = useState();
+	const [innerfile, setInnerfile] = useState([]);
 	const [contentStatus, setContentStatus] = useState(false);
-	// fetch user profile
+	// fetch data
 	const fetchData = async () =>{
 		const data = JSON.parse(localStorage.getItem('user'));
 		if(data!=null){
@@ -36,13 +37,13 @@ const Home = () =>{
 	}, []);
 
 
-	// console.log(fdata);
+	// get  folders and files 
 	const getFolderFiles = async (id, isFile) =>{
 		// console.log(id);
 		if(!isFile){
 			const res = await axios.get("file/fileByFolder", {folderid:id}).catch((err)=>console.log(err));
-			console.log(res);
-			// setfileData(res.data.data);
+			console.log(res.data.data);
+			setfData(res.data.data);
 		}else{
 			const data = JSON.parse(localStorage.getItem('user'));
 			const res = await axios.get("file/fileById/?user_id="+data.user_id+"&fileid="+id).catch((err)=>console.log(err));
@@ -53,8 +54,10 @@ const Home = () =>{
 
 		setContentStatus(true);
 		// console.log(filedata);
-		
+	
 	}
+
+	// fetch files and folders
 	const fetchFolder = fdata.map((item, index)=>{
 		var {folder_name,file_name, _id} = item;
 		var isFile= false;
@@ -68,13 +71,16 @@ const Home = () =>{
 			</tr>
 		);
 	});
-	// console.log("heelo"+filedata);
+
+	// show file content
 	var cdata="";
 	if(contentStatus){
 		cdata = <div className="m-4">
 			<p>File Content: {filedata}</p>
 		</div>
 	}
+		
+
 	return (
 		
 		<div className="container">
